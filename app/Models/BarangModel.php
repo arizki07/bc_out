@@ -15,4 +15,9 @@ class BarangModel extends Model
         'harga',
         'status',
     ];
+
+    public function bookings()
+    {
+        return $this->hasMany(BookingModel::class, 'barang_id');
+    }
 }

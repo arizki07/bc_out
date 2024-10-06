@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\KeuanganController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Http\Request;
@@ -19,6 +20,10 @@ Route::get('/testing', function () {
 
 Route::post('/register', [AuthController::class, 'registered']);
 Route::post('/login', [AuthController::class, 'authenticate']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 Route::post('barang', [BarangController::class, 'store']);
+Route::get('/getBarang', [BarangController::class, 'getbarang']);
 Route::post('/pendapatan', [KeuanganController::class, 'storePendapatan']);
 Route::post('/pengeluaran', [KeuanganController::class, 'storePengeluaran']);
+Route::post('/booking', [BookingController::class, 'store']);
+Route::get('/revenue', [KeuanganController::class, 'getTotalRevenue']);

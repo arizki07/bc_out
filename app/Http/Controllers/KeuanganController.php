@@ -2,39 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookingModel;
 use App\Models\PendapatanModel;
 use App\Models\PengeluaranModel;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class KeuanganController extends Controller
 {
-    public function storePendapatan(Request $request)
+    public function getTotalRevenue(): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'keterangan' => 'required',
-            'jumlah' => 'required|numeric',
-            'tanggal' => 'required|date',
-        ]);
+        $totalRevenue = BookingModel::sum('total_bayar');
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-            ], 400);
-        }
-
-        $pendapatan = new PendapatanModel();
-        $pendapatan->keterangan = $request->input('keterangan');
-        $pendapatan->jumlah = $request->input('jumlah');
-        $pendapatan->tanggal = $request->input('tanggal');
-        $pendapatan->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Pendapatan created successfully',
-            'data' => $pendapatan
-        ], 201);
+        return response()->json(['total_revenue' => $totalRevenue]);
     }
 
     // Menyimpan Pengeluaran

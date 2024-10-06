@@ -59,17 +59,43 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (!$token = auth()->attempt($credentials)) {
+        // Attempt to authenticate the user
+        if (!Auth::attempt($credentials)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Username atau Password salah',
             ], 401);
         }
 
+        // User is authenticated; generate a token
+        $user = Auth::user();
+        $token = $user->createToken('bc_api')->plainTextToken;
+
         return response()->json([
             'success' => true,
-            'user' => auth()->user(),
-            'token' => $token
+            'user' => $user,
+            'token' => $token // Return the actual token string
         ], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        // Ensure the user is authenticated
+        $user = auth()->user();
+
+        if ($user) {
+            // Revoke the user's token
+            $user->tokens()->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User logged out successfully.'
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'User not authenticated.'
+        ], 401);
     }
 }

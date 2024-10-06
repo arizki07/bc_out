@@ -41,4 +41,10 @@ class BarangController extends Controller
             'data' => $barang // Menambahkan data barang yang disimpan
         ], 201);
     }
+
+    public function getbarang()
+    {
+        $barang = BarangModel::all();
+        return response()->json($barang);
+    }
 }
