@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Validator;
 
 class BarangController extends Controller
 {
+
+    public function __construct()
+    {
+        date_default_timezone_set('Asia/Jakarta'); // Correctly set the timezone
+    }
+
     public function store(Request $request)
     {
         // Validasi input

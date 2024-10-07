@@ -11,11 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class KeuanganController extends Controller
 {
-    public function getTotalRevenue(): JsonResponse
+    public function getTotalBayar()
     {
-        $totalRevenue = BookingModel::sum('total_bayar');
-
-        return response()->json(['total_revenue' => $totalRevenue]);
+        $totalBayar = BookingModel::sum('total_bayar');
+        return response()->json(['total_bayar' => $totalBayar], 200);
     }
 
     // Menyimpan Pengeluaran

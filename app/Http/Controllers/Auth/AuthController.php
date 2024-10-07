@@ -63,7 +63,7 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Username atau Password salah',
+                'message' => 'Email atau Password salah',
             ], 401);
         }
 

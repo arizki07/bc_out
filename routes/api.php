@@ -26,4 +26,4 @@ Route::get('/getBarang', [BarangController::class, 'getbarang']);
 Route::post('/pendapatan', [KeuanganController::class, 'storePendapatan']);
 Route::post('/pengeluaran', [KeuanganController::class, 'storePengeluaran']);
 Route::post('/booking', [BookingController::class, 'store']);
-Route::get('/revenue', [KeuanganController::class, 'getTotalRevenue']);
+Route::get('/total-bayar', [KeuanganController::class, 'getTotalBayar']);

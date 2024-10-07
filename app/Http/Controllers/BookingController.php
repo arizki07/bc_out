@@ -21,8 +21,8 @@ class BookingController extends Controller
             'barang_id' => 'required|exists:barang,id',
             'customer' => 'required|string|max:255',
             'alamat' => 'required|string|max:255',
-            'tgl_sewa' => 'required|date',
-            'tgl_kembali' => 'required|date|after:tgl_sewa',
+            'tgl_sewa' => 'required|date|date_format:Y-m-d',
+            'tgl_kembali' => 'required|date|after:tgl_sewa|date_format:Y-m-d',
             'jaminan_sewa' => 'required|string|max:255',
             'uang_dp' => 'nullable|numeric',
             'total_bayar' => 'nullable|numeric',
@@ -36,8 +36,13 @@ class BookingController extends Controller
         // Mencari barang berdasarkan id
         $barang = BarangModel::find($request->barang_id);
 
-        // Hitung total bayar tanpa memperhitungkan durasi sewa (misalnya menggunakan harga tetap)
-        $totalBayar = $barang->harga; // Ganti dengan logika perhitungan yang sesuai
+        if (!$barang) {
+            return response()->json(['error' => 'Barang tidak ditemukan'], 404);
+        }
+
+        // Hitung total bayar (Misal menggunakan harga barang)
+        // Sesuaikan logika ini dengan kebutuhan bisnis Anda
+        // $totalBayar = $barang->harga; // Misalnya harga tetap barang
 
         // Buat booking baru
         $booking = BookingModel::create([
@@ -48,7 +53,7 @@ class BookingController extends Controller
             'tgl_kembali' => $request->tgl_kembali,
             'jaminan_sewa' => $request->jaminan_sewa,
             'uang_dp' => $request->uang_dp,
-            'total_bayar' => $totalBayar,
+            'total_bayar' => $request->total_bayar,
             'status' => $request->status,
         ]);
 
