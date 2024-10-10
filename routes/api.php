@@ -27,3 +27,4 @@ Route::post('/pendapatan', [KeuanganController::class, 'storePendapatan']);
 Route::post('/pengeluaran', [KeuanganController::class, 'storePengeluaran']);
 Route::get('/total-bayar', [KeuanganController::class, 'getTotalBayar']);
 Route::get('/getbooking', [BookingController::class, 'getBooking']);
+Route::put('/bookings/{id}', [BookingController::class, 'update']);
