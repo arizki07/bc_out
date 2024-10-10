@@ -12,6 +12,7 @@ class BookingModel extends Model
     protected $fillable = [
         'barang_id',
         'customer',
+        'no_hp',
         'alamat',
         'tgl_sewa',
         'tgl_kembali',

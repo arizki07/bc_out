@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('barang_id');
             $table->string('customer');
+            $table->string('no_hp');
             $table->string('alamat');
             $table->date('tgl_sewa');
             $table->date('tgl_kembali');
