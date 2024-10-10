@@ -33,17 +33,14 @@ class BookingController extends Controller
             'alamat' => 'required|string',
             'tgl_sewa' => 'required|date',
             'tgl_kembali' => 'required|date',
-            'jaminan_sewa' => 'required|file|mimes:jpg,png,pdf|max:2048', // File validation
+            'jaminan_sewa' => 'required|file|mimes:jpg,png,jpeg|max:2048', // File validation
             'uang_dp' => 'nullable|string',
         ]);
 
-        // Store the uploaded file in storage
         $filePath = $request->file('jaminan_sewa')->store('jaminan_files', 'public');
 
-        // Set the status based on 'uang_dp'
         $status = $request->uang_dp ? 'belum' : 'lunas';
 
-        // Save booking to the database
         $booking = BookingModel::create([
             'barang_id' => $validated['barang_id'],
             'customer' => $validated['customer'],
