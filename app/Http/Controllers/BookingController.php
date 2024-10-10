@@ -14,6 +14,18 @@ class BookingController extends Controller
         date_default_timezone_set('Asia/Jakarta'); // Correctly set the timezone
     }
 
+    public function getBooking()
+    {
+        $barang = BarangModel::all();
+        $booking = BookingModel::all();
+
+        return response()->json([
+            'barang' => $barang,
+            'booking' => $booking,
+        ]);
+    }
+
+
     public function index()
     {
         $barang = BarangModel::all();
@@ -54,22 +66,23 @@ class BookingController extends Controller
             'total_bayar' => null,
         ]);
 
-        $token = 'CDxpA_hWBv16LamrRZok';
-        $whatsappNumber = '081312211348';
-        // Ambil nama barang berdasarkan barang_id
+        $token = 'JhK9yFY6J+ewT1gvY9Jd';
+        $whatsappNumber = ($validated['no_hp']);
         $barang = BarangModel::find($validated['barang_id']);
 
-        // Membuat pesan WhatsApp
-        $message = "Pemesanan berhasil dilakukan!\n\n"
-            . "Nama Customer: {$validated['customer']}\n"
-            . "No Hp: {$validated['no_hp']}\n"
-            . "Alamat: {$validated['alamat']}\n"
-            . "Tanggal Sewa: {$validated['tgl_sewa']}\n"
-            . "Tanggal Kembali: {$validated['tgl_kembali']}\n"
-            . "Uang DP: {$validated['uang_dp']}\n"
-            . "Barang yang dipesan: {$barang->nama_barang}\n\n"
-            . "Terima kasih telah melakukan pemesanan!";
-
+        $message = "Hallo *{$validated['customer']}* 👋,\n\n"
+            . "Terima kasih telah memilih *Semesta Outdoor* untuk kebutuhan penyewaan barang outdoor Anda! 🎒✨\n\n"
+            . "Berikut detail pemesanan Anda:\n"
+            . "📱 *No HP*: {$validated['no_hp']}\n"
+            . "🏡 *Alamat*: {$validated['alamat']}\n"
+            . "📅 *Tanggal Sewa*: {$validated['tgl_sewa']}\n"
+            . "📅 *Tanggal Kembali*: {$validated['tgl_kembali']}\n"
+            . "💵 *Uang DP*: " . ($validated['uang_dp'] ? "Rp {$validated['uang_dp']}" : "Belum dibayar") . "\n"
+            . "📦 *Barang yang dipesan*: {$barang->nama_barang}\n\n"
+            . "Anda dapat menghubungi admin kami untuk melanjutkan proses transaksi atau jika ada pertanyaan lebih lanjut.\n"
+            . "Terima kasih atas kepercayaan Anda dan selamat berpetualang bersama *Semesta Outdoor*! 🌍🌲\n\n"
+            . "*Salam Hangat*,\n"
+            . "*Tim Semesta Outdoor*";
 
         $curl = curl_init();
 
