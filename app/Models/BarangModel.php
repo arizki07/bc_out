@@ -14,6 +14,7 @@ class BarangModel extends Model
         'stok',
         'harga',
         'status',
+        'foto',
     ];
 
     public function bookings()

@@ -19,17 +19,26 @@ class BarangController extends Controller
         // Validasi input
         $validator = Validator::make($request->all(), [
             'nama_barang' => 'required',
-            'stok' => 'required|integer',  // Tambahkan validasi integer untuk stok
-            'harga' => 'required|numeric', // Tambahkan validasi numeric untuk harga
-            'status' => 'required', // Validasi untuk status hanya bisa available/unavailable
+            'stok' => 'required|integer',
+            'harga' => 'required|numeric',
+            'status' => 'required',
+            'foto' => 'nullable|image|mimes:jpg,png,jpeg|max:2048', // Mengubah menjadi nullable
         ]);
 
         // Jika validasi gagal
         if ($validator->fails()) {
             return response()->json([
-                'success' => false, // Mengoreksi typo "succes"
+                'success' => false,
                 'message' => $validator->errors(),
             ], 400);
+        }
+
+        // Jika ada file foto yang diunggah
+        if ($request->hasFile('foto')) {
+            // Rename the file to a unique name to avoid overwriting
+            $foto = $request->file('foto')->store('barang/', 'public');
+        } else {
+            $foto = null; // Foto nullable, jadi bisa null
         }
 
         // Menyimpan data barang ke database
@@ -38,6 +47,7 @@ class BarangController extends Controller
         $barang->stok = $request->input('stok');
         $barang->harga = $request->input('harga');
         $barang->status = $request->input('status');
+        $barang->foto = $foto; // Menyimpan foto yang nullable
         $barang->save(); // Simpan data ke database
 
         // Jika berhasil disimpan
@@ -47,6 +57,7 @@ class BarangController extends Controller
             'data' => $barang // Menambahkan data barang yang disimpan
         ], 201);
     }
+
 
     public function getbarang()
     {
