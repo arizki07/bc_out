@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('booking', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('barang_id');
-            $table->string('customer');
-            $table->string('no_hp');
-            $table->string('alamat');
-            $table->date('tgl_sewa');
-            $table->date('tgl_kembali');
-            $table->string('jaminan_sewa');
+            $table->text('barang_id');
+            $table->string('paket')->nullable();
+            $table->string('customer')->nullable();
+            $table->string('no_hp')->nullable();
+            $table->string('alamat')->nullable();
+            $table->date('tgl_sewa')->nullable();
+            $table->date('tgl_kembali')->nullable();
+            $table->string('jaminan_sewa')->nullable();
             $table->string('uang_dp')->nullable();
             $table->string('total_bayar')->nullable();
-            $table->enum('status', ['lunas', 'belum']);
+            $table->enum('status', ['lunas', 'belum', 'pending']);
             $table->timestamps();
         });
     }
