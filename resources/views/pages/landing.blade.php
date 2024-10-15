@@ -104,8 +104,7 @@
                                     <!-- Hanya tampilkan 4 item per slide -->
                                     <div class="col-12 col-md-3 mb-4">
                                         <a class="product-item" href="cart.html">
-                                            <img src="{{ asset('assets/images/product-1.png') }}"
-                                                class="img-fluid product-thumbnail">
+                                            <img src="{{ Storage::url($item->foto) }}" class="img-fluid product-thumbnail">
                                             <h3 class="product-title">{{ $item->nama_barang }}</h3>
                                             <strong class="product-price">Rp.{{ $item->harga }}</strong>
                                         </a>
