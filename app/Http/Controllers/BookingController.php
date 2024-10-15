@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BarangModel;
 use App\Models\BookingModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
@@ -12,6 +13,19 @@ class BookingController extends Controller
     public function __construct()
     {
         date_default_timezone_set('Asia/Jakarta'); // Correctly set the timezone
+    }
+
+    public function getBooking()
+    {
+        $booking = BookingModel::all();
+
+        // Mengambil data barang, misalnya dari tabel barang
+        $barang = DB::table('barang')->select('id', 'nama_barang')->get(); // Sesuaikan dengan struktur tabel Anda
+
+        return response()->json([
+            'barang' => $barang,
+            'booking' => $booking,
+        ]);
     }
 
     public function index()
@@ -108,19 +122,21 @@ class BookingController extends Controller
     //     ]);
 
 
-    //     $token = 'CDxpA_hWBv16LamrRZok';
-    //     $whatsappNumber = '081312211348';
-    //     $barang = BarangModel::find($validated['barang_id']);
+        $token = 'CDxpA_hWBv16LamrRZok';
+        $whatsappNumber = '081312211348';
+        // Ambil nama barang berdasarkan barang_id
+        $barang = BarangModel::find($validated['barang_id']);
 
-    //     $message = "Pemesanan berhasil dilakukan!\n\n"
-    //         . "Nama Customer: {$validated['customer']}\n"
-    //         . "No Hp: {$validated['no_hp']}\n"
-    //         . "Alamat: {$validated['alamat']}\n"
-    //         . "Tanggal Sewa: {$validated['tgl_sewa']}\n"
-    //         . "Tanggal Kembali: {$validated['tgl_kembali']}\n"
-    //         . "Uang DP: {$validated['uang_dp']}\n"
-    //         . "Barang yang dipesan: {$barang->nama_barang}\n\n"
-    //         . "Terima kasih telah melakukan pemesanan!";
+        // Membuat pesan WhatsApp
+        $message = "Pemesanan berhasil dilakukan!\n\n"
+            . "Nama Customer: {$validated['customer']}\n"
+            . "No Hp: {$validated['no_hp']}\n"
+            . "Alamat: {$validated['alamat']}\n"
+            . "Tanggal Sewa: {$validated['tgl_sewa']}\n"
+            . "Tanggal Kembali: {$validated['tgl_kembali']}\n"
+            . "Uang DP: {$validated['uang_dp']}\n"
+            . "Barang yang dipesan: {$barang->nama_barang}\n\n"
+            . "Terima kasih telah melakukan pemesanan!";
 
 
     //     $curl = curl_init();
@@ -147,56 +163,45 @@ class BookingController extends Controller
     //     return response()->json(['success' => true, 'message' => 'Booking saved and notification sent.']);
     // }
 
+    public function update(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
+            'uang_dp' => 'nullable|numeric', // Ensure it’s numeric
+            'total_bayar' => 'required|numeric', // Ensure it’s numeric
+        ]);
 
+        // Return validation errors if validation fails
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors(),
+            ], 400);
+        }
 
-    // public function store(Request $request)
-    // {
-    //     // Validasi input
-    //     $validator = Validator::make($request->all(), [
-    //         'barang_id' => 'required|exists:barang,id',
-    //         'customer' => 'required|string|max:255',
-    //         'alamat' => 'required|string|max:255',
-    //         'tgl_sewa' => 'required|date|date_format:Y-m-d',
-    //         'tgl_kembali' => 'required|date|after:tgl_sewa|date_format:Y-m-d',
-    //         'jaminan_sewa' => 'required|string|max:255',
-    //         'uang_dp' => 'nullable|numeric',
-    //         'total_bayar' => 'nullable|numeric',
-    //         'status' => 'required|in:lunas,belum',
-    //     ]);
+        // Find the booking by ID
+        $booking = BookingModel::find($id);
 
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->errors(), 422);
-    //     }
+        // Check if booking exists
+        if (!$booking) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Booking not found',
+            ], 404);
+        }
 
-    //     // Mencari barang berdasarkan id
-    //     $barang = BarangModel::find($request->barang_id);
+        // Update the fields
+        $booking->uang_dp = $request->input('uang_dp');
+        $booking->total_bayar = $request->input('total_bayar');
 
-    //     if (!$barang) {
-    //         return response()->json(['error' => 'Barang tidak ditemukan'], 404);
-    //     }
+        // Save the changes
+        $booking->save();
 
-    //     // Hitung total bayar (Misal menggunakan harga barang)
-    //     // Sesuaikan logika ini dengan kebutuhan bisnis Anda
-    //     // $totalBayar = $barang->harga; // Misalnya harga tetap barang
-
-    //     // Buat booking baru
-    //     $booking = BookingModel::create([
-    //         'barang_id' => $request->barang_id,
-    //         'customer' => $request->customer,
-    //         'alamat' => $request->alamat,
-    //         'tgl_sewa' => $request->tgl_sewa,
-    //         'tgl_kembali' => $request->tgl_kembali,
-    //         'jaminan_sewa' => $request->jaminan_sewa,
-    //         'uang_dp' => $request->uang_dp,
-    //         'total_bayar' => $request->total_bayar,
-    //         'status' => $request->status,
-    //     ]);
-
-    //     // Jika status sudah lunas, set uang dp menjadi null
-    //     if ($request->status === 'lunas') {
-    //         $booking->update(['uang_dp' => null]);
-    //     }
-
-    //     return response()->json($booking, 201);
-    // }
+        // Return a successful response
+        return response()->json([
+            'success' => true,
+            'message' => 'Booking updated successfully',
+            'data' => $booking, // Optionally return the updated booking data
+        ], 200);
+    }
 }
