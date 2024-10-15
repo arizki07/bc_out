@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BarangModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illumintae\Support\Str;
 
 class BarangController extends Controller
 {
@@ -16,48 +17,36 @@ class BarangController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
-        $validator = Validator::make($request->all(), [
-            'nama_barang' => 'required',
+        $request->validate([
+            'nama_barang' => 'required|string|max:255',
             'stok' => 'required|integer',
             'harga' => 'required|numeric',
-            'status' => 'required',
-            'foto' => 'nullable|image|mimes:jpg,png,jpeg|max:2048', // Mengubah menjadi nullable
+            'status' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi untuk foto
         ]);
 
-        // Jika validasi gagal
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-            ], 400);
-        }
-
-        // Jika ada file foto yang diunggah
+        // Menyimpan foto jika ada
+        $fotoPath = null;
         if ($request->hasFile('foto')) {
-            // Rename the file to a unique name to avoid overwriting
-            $foto = $request->file('foto')->store('barang/', 'public');
-        } else {
-            $foto = null; // Foto nullable, jadi bisa null
+            // Generate unique file name
+            $fileName = Str::random(10) . '.' . $request->file('foto')->getClientOriginalExtension(); // Contoh: abc1234567.jpg
+            $fotoPath = $request->file('foto')->storeAs('images/barang', $fileName, 'public'); // Simpan di storage/app/public/images/barang
         }
 
-        // Menyimpan data barang ke database
-        $barang = new BarangModel();
-        $barang->nama_barang = $request->input('nama_barang');
-        $barang->stok = $request->input('stok');
-        $barang->harga = $request->input('harga');
-        $barang->status = $request->input('status');
-        $barang->foto = $foto; // Menyimpan foto yang nullable
-        $barang->save(); // Simpan data ke database
+        // Simpan data barang ke database
+        $barang = BarangModel::create([
+            'nama_barang' => $request->nama_barang,
+            'stok' => $request->stok,
+            'harga' => $request->harga,
+            'status' => $request->status,
+            'foto' => $fileName, // Simpan hanya nama file
+        ]);
 
-        // Jika berhasil disimpan
         return response()->json([
-            'success' => true,
-            'message' => 'Barang created successfully',
-            'data' => $barang // Menambahkan data barang yang disimpan
+            'message' => 'Data barang berhasil disimpan!',
+            'data' => $barang,
         ], 201);
     }
-
 
     public function getbarang()
     {
