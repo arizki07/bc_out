@@ -122,21 +122,21 @@ class BookingController extends Controller
     //     ]);
 
 
-        $token = 'CDxpA_hWBv16LamrRZok';
-        $whatsappNumber = '081312211348';
-        // Ambil nama barang berdasarkan barang_id
-        $barang = BarangModel::find($validated['barang_id']);
+    // $token = 'CDxpA_hWBv16LamrRZok';
+    // $whatsappNumber = '081312211348';
+    // // Ambil nama barang berdasarkan barang_id
+    // $barang = BarangModel::find($validated['barang_id']);
 
-        // Membuat pesan WhatsApp
-        $message = "Pemesanan berhasil dilakukan!\n\n"
-            . "Nama Customer: {$validated['customer']}\n"
-            . "No Hp: {$validated['no_hp']}\n"
-            . "Alamat: {$validated['alamat']}\n"
-            . "Tanggal Sewa: {$validated['tgl_sewa']}\n"
-            . "Tanggal Kembali: {$validated['tgl_kembali']}\n"
-            . "Uang DP: {$validated['uang_dp']}\n"
-            . "Barang yang dipesan: {$barang->nama_barang}\n\n"
-            . "Terima kasih telah melakukan pemesanan!";
+    // // Membuat pesan WhatsApp
+    // $message = "Pemesanan berhasil dilakukan!\n\n"
+    //     . "Nama Customer: {$validated['customer']}\n"
+    //     . "No Hp: {$validated['no_hp']}\n"
+    //     . "Alamat: {$validated['alamat']}\n"
+    //     . "Tanggal Sewa: {$validated['tgl_sewa']}\n"
+    //     . "Tanggal Kembali: {$validated['tgl_kembali']}\n"
+    //     . "Uang DP: {$validated['uang_dp']}\n"
+    //     . "Barang yang dipesan: {$barang->nama_barang}\n\n"
+    //     . "Terima kasih telah melakukan pemesanan!";
 
 
     //     $curl = curl_init();
@@ -163,45 +163,45 @@ class BookingController extends Controller
     //     return response()->json(['success' => true, 'message' => 'Booking saved and notification sent.']);
     // }
 
-    public function update(Request $request, $id)
-    {
-        // Validate the incoming request data
-        $validator = Validator::make($request->all(), [
-            'uang_dp' => 'nullable|numeric', // Ensure it’s numeric
-            'total_bayar' => 'required|numeric', // Ensure it’s numeric
-        ]);
+    // public function update(Request $request, $id)
+    // {
+    //     // Validate the incoming request data
+    //     $validator = Validator::make($request->all(), [
+    //         'uang_dp' => 'nullable|numeric', // Ensure it’s numeric
+    //         'total_bayar' => 'required|numeric', // Ensure it’s numeric
+    //     ]);
 
-        // Return validation errors if validation fails
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-            ], 400);
-        }
+    //     // Return validation errors if validation fails
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => $validator->errors(),
+    //         ], 400);
+    //     }
 
-        // Find the booking by ID
-        $booking = BookingModel::find($id);
+    //     // Find the booking by ID
+    //     $booking = BookingModel::find($id);
 
-        // Check if booking exists
-        if (!$booking) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Booking not found',
-            ], 404);
-        }
+    //     // Check if booking exists
+    //     if (!$booking) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Booking not found',
+    //         ], 404);
+    //     }
 
-        // Update the fields
-        $booking->uang_dp = $request->input('uang_dp');
-        $booking->total_bayar = $request->input('total_bayar');
+    //     // Update the fields
+    //     $booking->uang_dp = $request->input('uang_dp');
+    //     $booking->total_bayar = $request->input('total_bayar');
 
-        // Save the changes
-        $booking->save();
+    //     // Save the changes
+    //     $booking->save();
 
-        // Return a successful response
-        return response()->json([
-            'success' => true,
-            'message' => 'Booking updated successfully',
-            'data' => $booking, // Optionally return the updated booking data
-        ], 200);
-    }
+    //     // Return a successful response
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Booking updated successfully',
+    //         'data' => $booking, // Optionally return the updated booking data
+    //     ], 200);
+    // }
 }

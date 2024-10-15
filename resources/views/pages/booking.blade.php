@@ -1,240 +1,167 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Halaman Booking | {{ $judul }}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            max-width: 900px;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            text-align: center;
-        }
-
-        h1 {
-            margin-top: 0;
-            color: #4facfe;
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .row .column {
-            flex-basis: calc(50% - 20px);
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input,
-        select {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .btn-submit {
-            background-color: #28a745;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 16px;
-        }
-
-        .btn-submit:hover {
-            background-color: #218838;
-        }
-
-        .text-danger {
-            color: red;
-        }
-
-        @media (max-width: 768px) {
-            .row {
-                flex-direction: column;
-            }
-
-            .row .column {
-                flex-basis: 100%;
-            }
-        }
-    </style>
-    <!-- SweetAlert CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-</head>
-
-<body>
-
-    <div class="container">
-        <h1>Selamat Datang di Halaman Booking</h1>
-        <h2>Form Booking</h2>
-        <form action="{{ route('booking.store') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-
-            <div class="column">
-                <label for="barang_id">Pilih Barang</label>
-                <select name="barang_id" id="barang_id" required>
-                    <option selected disabled>--Pilih Barang--</option>
-                    @foreach ($barang as $item)
-                        <option value="{{ $item->id }}">{{ $item->nama_barang }}</option>
-                    @endforeach
-                </select>
+@extends('layouts.app')
+@section('content')
+    <!-- Start Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Booking</h1>
+                    </div>
+                </div>
+                <div class="col-lg-7"></div>
             </div>
-
-            <!-- Row 1: Barang dan Customer -->
-            <div class="row">
-                <div class="column">
-                    <label for="customer">Nama Customer</label>
-                    <input type="text" name="customer" id="customer" placeholder="Masukkan nama customer" required>
-                </div>
-                <div class="column">
-                    <label for="no_hp">No Hp</label>
-                    <input type="text" name="no_hp" id="no_hp" placeholder="+628---" required>
-                </div>
-            </div>
-
-            <!-- Row 2: Alamat dan Tanggal Sewa -->
-            <div class="row">
-                <div class="column">
-                    <label for="tgl_sewa">Tanggal Sewa</label>
-                    <input type="date" name="tgl_sewa" id="tgl_sewa" required>
-                </div>
-                <div class="column">
-                    <label for="tgl_kembali">Tanggal Kembali</label>
-                    <input type="date" name="tgl_kembali" id="tgl_kembali" required>
-                </div>
-            </div>
-
-            <!-- Row 3: Jaminan Sewa (File Upload) -->
-            <div class="row">
-                <div class="column">
-                    <label for="jaminan_sewa">Jaminan Sewa (Upload File)</label>
-                    <input type="file" name="jaminan_sewa" id="jaminan_sewa" required>
-                </div>
-                <div class="column">
-                    <label for="uang_dp">Uang DP (opsional)</label>
-                    <input type="text" name="uang_dp" id="uang_dp" placeholder="Masukkan uang DP">
-                    <small class="text-danger">*Isi jika anda Dp</small>
-                </div>
-            </div>
-
-            <!-- Row 4: Alamat -->
-            <div class="column">
-                <label for="alamat">Alamat</label>
-                <input type="text" name="alamat" id="alamat" placeholder="Masukkan alamat" required>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="btn-submit">Submit Booking</button>
-        </form>
+        </div>
     </div>
+    <!-- End Hero Section -->
 
-    <!-- Bootstrap 5 JS (Optional for interactive components) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="untree_co-section product-section before-footer-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Form Pemesanan</h5>
+
+                            <!-- Button to add item in card header -->
+                            <div class="d-flex justify-content-end mb-2">
+                                <button type="button" id="add-item" class="btn btn-secondary">Tambah Barang</button>
+                            </div>
+
+                            <form action="{{ route('booking.store') }}" method="POST" enctype="multipart/form-data">
+                                @csrf <!-- Pastikan untuk menyertakan token CSRF -->
+                                <div id="barang-container" class="mb-4">
+                                    <div class="barang-item mb-3">
+                                        <label for="barang" class="form-label">Pilih Barang</label>
+                                        <select name="barang_ids[]" class="form-select" required>
+                                            <option value="" disabled selected>Pilih Barang</option>
+                                            @foreach ($barang as $item)
+                                                <option value="{{ $item->id }}">{{ $item->nama_barang }}</option>
+                                            @endforeach
+                                        </select>
+                                        <button type="button" class="btn btn-danger btn-sm remove-item mt-2"
+                                            title="Hapus">
+                                            <i class="bi bi-x-circle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-12 mb-3">
+                                    <label for="customer" class="form-label">Nama Customer</label>
+                                    <input type="text" id="customer" name="customer" class="form-control" required>
+                                </div>
+
+                                <div class="col-lg-12 mb-3">
+                                    <label for="no_hp" class="form-label">Nomor HP</label>
+                                    <input type="text" id="no_hp" name="no_hp" class="form-control" required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="tgl_sewa" class="form-label">Tanggal Sewa</label>
+                                        <input type="date" id="tgl_sewa" name="tgl_sewa" class="form-control" required>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="tgl_kembali" class="form-label">Tanggal Kembali</label>
+                                        <input type="date" id="tgl_kembali" name="tgl_kembali" class="form-control"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="jaminan_sewa" class="form-label">Jaminan Sewa</label>
+                                        <input type="file" id="jaminan_sewa" name="jaminan_sewa" class="form-control"
+                                            required>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="uang_dp" class="form-label">Uang DP (optional)</label>
+                                        <input type="number" id="uang_dp" name="uang_dp" class="form-control"
+                                            min="0">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Sisa Bayar:</label>
+                                    <span id="sisa_bayar">0</span> <!-- Menampilkan sisa bayar -->
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="total_bayar" class="form-label">Total Bayar:</label>
+                                    <input type="text" id="total_bayar" name="total_bayar" class="form-control" disabled>
+                                </div>
+
+
+
+                                <div class="mb-3">
+                                    <label for="alamat" class="form-label">Alamat</label>
+                                    <textarea id="alamat" name="alamat" class="form-control" rows="3" required></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Kirim</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Include jQuery (optional, but makes DOM manipulation easier) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const form = document.querySelector('form');
+        $(document).ready(function() {
+            const harga = {!! json_encode($barang->pluck('harga', 'id')) !!}; // Pass harga to the view
 
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Mencegah pengiriman formulir default
+            const calculateTotal = () => {
+                let total = 0;
+                $('select[name="barang_ids[]"]').each(function() {
+                    const barangId = $(this).val();
+                    if (barangId) {
+                        total += parseFloat(harga[barangId]) || 0; // Menambahkan harga barang ke total
+                    }
+                });
+                $('#total_bayar').val(total); // Set input total_bayar dengan nilai total
+                updateSisaBayar(); // Update sisa bayar
+            };
 
-                const formData = new FormData(form);
+            const updateSisaBayar = () => {
+                const totalBayar = parseFloat($('#total_bayar').val()) || 0; // Selalu gunakan total
+                const uangDp = parseFloat($('#uang_dp').val()) || 0;
+                const sisaBayar = totalBayar - uangDp; // Hitung sisa bayar
+                $('#sisa_bayar').text(sisaBayar >= 0 ? sisaBayar : 0); // Update sisa bayar
+            };
 
-                fetch(form.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Tambahkan token CSRF
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Tampilkan notifikasi menggunakan SweetAlert
-                            showNotification('Pemesanan berhasil! Pesan WhatsApp telah terkirim.');
-                        } else {
-                            showNotification('Terjadi kesalahan. Silakan coba lagi.');
-                        }
-                    })
-                    .catch(error => {
-                        showNotification('Terjadi kesalahan. Silakan coba lagi.');
-                        console.error('Error:', error);
-                    });
+            $('#add-item').click(function() {
+                $('#barang-container').append(`
+                    <div class="barang-item mb-3">
+                        <label for="barang" class="form-label">Pilih Barang</label>
+                        <select name="barang_ids[]" class="form-select" required>
+                            <option value="" disabled selected>Pilih Barang</option>
+                            @foreach ($barang as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama_barang }}</option>
+                            @endforeach
+                        </select>
+                        <button type="button" class="btn btn-danger btn-sm remove-item mt-2" title="Hapus">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
+                `);
+                calculateTotal(); // Recalculate total when a new item is added
             });
 
-            function showNotification(message) {
-                // Menggunakan SweetAlert untuk menampilkan notifikasi
-                swal({
-                    title: "Notifikasi",
-                    text: message,
-                    icon: "success",
-                    button: false,
-                    timer: 3000, // Notifikasi akan hilang setelah 3 detik
-                    position: 'top-end', // Posisi di pojok kanan atas
-                    className: "sweet-alert-custom" // Kelas kustom untuk styling
-                });
+            $(document).on('change', 'select[name="barang_ids[]"]', function() {
+                calculateTotal(); // Recalculate total when an item selection changes
+            });
 
-                // Refresh halaman setelah notifikasi menghilang
-                setTimeout(() => {
-                    location.reload();
-                }, 3100); // Waktu tunggu untuk refresh (3 detik + 100 ms untuk memberi waktu notifikasi menghilang)
-            }
+            $(document).on('click', '.remove-item', function() {
+                $(this).closest('.barang-item').remove();
+                calculateTotal(); // Recalculate total when an item is removed
+            });
+
+            $('#uang_dp').on('input', function() {
+                updateSisaBayar(); // Update remaining payment when DP changes
+            });
         });
     </script>
-
-    <style>
-        .sweet-alert-custom {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-    </style>
-
-</body>
-
-</html>
+@endsection
